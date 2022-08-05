@@ -14,7 +14,9 @@ public class CLI {
 
     static List<String> getContainersId() throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder("docker", "container", "ls", "--quiet");
-        File containers = new File("src/main/resources/containers-id");
+
+        File containers = new File(Constant.PATH + "id");
+
         pb.redirectErrorStream(true);
         pb.redirectOutput(ProcessBuilder.Redirect.to(containers));
 
@@ -28,16 +30,27 @@ public class CLI {
     }
 
     static void inspect(String id) throws IOException, InterruptedException {
-        logger.info(id);
-
         ProcessBuilder pb = new ProcessBuilder("docker", "inspect", "--format={{json .}}" ,  id);
 
-        String filepath = "src/main/resources/container-" + id + ".json";
-        File file = new File(filepath);
+        File file = new File(Constant.PATH + id + ".json");
         pb.redirectErrorStream(true);
         pb.redirectOutput(ProcessBuilder.Redirect.to(file));
 
         Process p = pb.start();
         p.waitFor();
+    }
+
+    public static void kill(String id) throws IOException, InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder("docker","rm", "-f", id);
+
+
+        pb.redirectErrorStream(true);
+
+        Process p= pb.start();
+        String result = new String(p.getInputStream().readAllBytes());
+
+        p.waitFor();
+
+        logger.warn(result);
     }
 }

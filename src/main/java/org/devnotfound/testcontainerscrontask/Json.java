@@ -14,8 +14,11 @@ public class Json {
 
     private static final Logger logger = LoggerFactory.getLogger(Json.class);
 
-    static void parse(File file) throws Exception {
+    static boolean isFromTestContainers(String id) throws Exception {
 
+        File file = new File(Constant.PATH + id + ".json");
+
+        boolean isTestContainerNative = false;
 
         JsonFactory f = new MappingJsonFactory();
         JsonParser jp = f.createParser(file);
@@ -35,7 +38,7 @@ public class Json {
 
             if (fieldName == null)
                 logger.warn(jp.getCurrentLocation().toString());
-            if (fieldName.equals("Config")) {
+            if (fieldName != null && fieldName.equals("Config")) {
                 logger.trace("Successfully processed field: " + fieldName);
 
                 while (jp.nextToken() != JsonToken.END_OBJECT) {
@@ -56,6 +59,7 @@ public class Json {
                                 logger.trace("org.testcontainers: " + node.get("org.testcontainers.copied_files.hash").toPrettyString());
                                 logger.trace("org.testcontainers: " + node.get("org.testcontainers.hash").toPrettyString());
                                 nodeSkipped = true;
+                                isTestContainerNative = true;
                             } else {
                                 logger.trace("Unprocessed target property: " + targetFieldName);
                                 jp.skipChildren();
@@ -74,5 +78,6 @@ public class Json {
                 jp.skipChildren();
             }
         }
+        return isTestContainerNative;
     }
 }

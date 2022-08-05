@@ -3,7 +3,6 @@ package org.devnotfound.testcontainerscrontask;
 
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.util.List;
 
 @Component
@@ -21,9 +20,10 @@ public class CronTask {
 
         for (String id :
                 ids) {
-            Json.parse(new File("src/main/resources/container-" + id + ".json"));
+            if (Json.isFromTestContainers(id)) {
+                CLI.kill(id);
+            }
         }
-
 
         return 0;
     }
