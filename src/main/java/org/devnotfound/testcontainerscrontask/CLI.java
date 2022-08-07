@@ -3,54 +3,60 @@ package org.devnotfound.testcontainerscrontask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 public class CLI {
     private static final Logger logger = LoggerFactory.getLogger(CronTask.class);
 
-    static List<String> getContainersId() throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder("docker", "container", "ls", "--quiet");
+    private final ProcessBuilder pb;
 
-        File containers = new File(Constant.PATH + "id");
-
-        pb.redirectErrorStream(true);
-        pb.redirectOutput(ProcessBuilder.Redirect.to(containers));
-
-        Process p = pb.start();
-        p.waitFor();
-
-        String s = Files.readString(Path.of("src/main/resources/containers-id"));
-
-        return List.of(s.trim().split("\\n"));
-
+    public CLI() {
+        this.pb = new ProcessBuilder();
     }
 
-    static void inspect(String id) throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder("docker", "inspect", "--format={{json .}}" ,  id);
-
-        File file = new File(Constant.PATH + id + ".json");
+    List<String> getContainersId() throws IOException, InterruptedException {
+        pb.command("docker", "container", "ls", "--quiet");
         pb.redirectErrorStream(true);
-        pb.redirectOutput(ProcessBuilder.Redirect.to(file));
-
         Process p = pb.start();
+
+        String ids = new String(p.getInputStream().readAllBytes());
         p.waitFor();
+
+        if (ids.isEmpty()) {
+            throw new RuntimeException("Id array is empty : No container are currently executed by Docker");
+
+        }
+
+        return List.of(ids.trim().split("\\n"));
     }
 
-    public static void kill(String id) throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder("docker","rm", "-f", id);
-
+    String inspect(String id) throws IOException, InterruptedException {
+        pb.command("docker", "inspect", "--format={{json .}}", id);
 
         pb.redirectErrorStream(true);
+        Process p = pb.start();
 
-        Process p= pb.start();
-        String result = new String(p.getInputStream().readAllBytes());
+        String json = new String(p.getInputStream().readAllBytes());
 
         p.waitFor();
 
-        logger.warn(result);
+        return json;
+    }
+
+    void kill(String id) throws IOException, InterruptedException {
+        pb.command("docker", "rm", "-f", id);
+
+        pb.redirectErrorStream(true);
+
+        Process p = pb.start();
+        String in = new String(p.getInputStream().readAllBytes());
+        p.waitFor();
+
+        if (in.isEmpty()) {
+            logger.info("Docker successfully removed container of id: " + id);
+        } else {
+            logger.info(in);
+        }
     }
 }

@@ -8,22 +8,19 @@ import com.fasterxml.jackson.databind.MappingJsonFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-
 public class Json {
 
     private static final Logger logger = LoggerFactory.getLogger(Json.class);
 
-    static boolean isFromTestContainers(String id) throws Exception {
+    static boolean isFromTestContainers(String json) throws Exception {
 
-        File file = new File(Constant.PATH + id + ".json");
+//        File file = new File(Constant.FILE_LOCATION + Constant.FILE_NAME + id + ".json");
 
         boolean isTestContainerNative = false;
 
         JsonFactory f = new MappingJsonFactory();
-        JsonParser jp = f.createParser(file);
+        JsonParser jp = f.createParser(json);
         JsonToken current;
-
         boolean nodeSkipped = false;
         if (jp.nextToken() != JsonToken.START_OBJECT) {
             logger.debug("root should be object: ignoring first token.");
@@ -56,6 +53,7 @@ public class Json {
                                 JsonNode node = jp.readValueAsTree();
                                 // And now we have random access to everything in the object
                                 logger.trace("org.testcontainers: " + node.get("org.testcontainers").toPrettyString());
+
                                 logger.trace("org.testcontainers: " + node.get("org.testcontainers.copied_files.hash").toPrettyString());
                                 logger.trace("org.testcontainers: " + node.get("org.testcontainers.hash").toPrettyString());
                                 nodeSkipped = true;
@@ -78,6 +76,7 @@ public class Json {
                 jp.skipChildren();
             }
         }
+        jp.close();
         return isTestContainerNative;
     }
 }

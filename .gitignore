@@ -3,8 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-src/main/resources/*.json
-src/main/resources/containers-id
+src/main/resources/containers/*.json
+src/main/resources/containers/containers-id
 
 ### STS ###
 .apt_generated
