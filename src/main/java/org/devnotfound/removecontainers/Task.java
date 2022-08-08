@@ -1,4 +1,4 @@
-package org.devnotfound.testcontainerscrontask;
+package org.devnotfound.removecontainers;
 
 
 import org.slf4j.Logger;
@@ -7,14 +7,14 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 
-public class CronTask {
+public class Task {
 
-    private static final Logger logger = LoggerFactory.getLogger(CronTask.class);
+    private static final Logger logger = LoggerFactory.getLogger(Task.class);
 
     public int deletedFiles;
     private final CLI cli;
 
-    public CronTask() {
+    public Task() {
         deletedFiles = 0;
         this.cli = new CLI();
     }

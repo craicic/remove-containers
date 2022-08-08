@@ -1,10 +1,10 @@
-package org.devnotfound.testcontainerscrontask;
+package org.devnotfound.removecontainers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ContainerRemoverApplicationTests {
+class RemoveContainersApplicationTests {
 
     @Test
     void contextLoads() {
