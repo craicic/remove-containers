@@ -1,4 +1,4 @@
-package org.devnotfound.testcontainerscrontask;
+package org.devnotfound.removecontainers;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
@@ -13,8 +13,6 @@ public class Json {
     private static final Logger logger = LoggerFactory.getLogger(Json.class);
 
     static boolean isFromTestContainers(String json) throws Exception {
-
-//        File file = new File(Constant.FILE_LOCATION + Constant.FILE_NAME + id + ".json");
 
         boolean isTestContainerNative = false;
 

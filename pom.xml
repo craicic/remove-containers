@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.devnotfound</groupId>
-    <artifactId>TestContainers-CronTask</artifactId>
-    <version>0.1</version>
-    <name>Remove Container</name>
-    <description>A Java Container Remover</description>
+    <artifactId>remove-containers</artifactId>
+    <version>0.2</version>
+    <name>Remove Containers</name>
+    <description>A tool to remove Docker containers based on their labels.</description>
     <properties>
         <java.version>17</java.version>
         <jackson.version>2.13.3</jackson.version>
