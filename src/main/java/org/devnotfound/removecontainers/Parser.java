@@ -8,9 +8,13 @@ import com.fasterxml.jackson.databind.MappingJsonFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Json {
+public class Parser {
 
-    private static final Logger logger = LoggerFactory.getLogger(Json.class);
+    private static final Logger logger = LoggerFactory.getLogger(Parser.class);
+
+    static boolean isError(String message) {
+        return message.startsWith("error");
+    }
 
     static boolean isFromTestContainers(String json) throws Exception {
 

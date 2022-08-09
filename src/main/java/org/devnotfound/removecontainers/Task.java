@@ -29,14 +29,14 @@ public class Task {
             throw new RuntimeException(e);
         } catch (RuntimeException e) {
             logger.info(e.getMessage());
-            logger.debug("Current task will now end");
+            logger.debug("Current task iteration will now end");
             return 1;
         }
 
         for (String id :
                 ids) {
             if (id != null)
-                if(Json.isFromTestContainers(cli.inspect(id))) {
+                if(Parser.isFromTestContainers(cli.inspect(id))) {
                 cli.kill(id);
                 deletedFiles ++;
             }

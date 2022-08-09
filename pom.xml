@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.devnotfound</groupId>
     <artifactId>remove-containers</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
     <name>Remove Containers</name>
     <description>A tool to remove Docker containers based on their labels.</description>
     <properties>

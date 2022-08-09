@@ -1,5 +1,4 @@
-# REMOVE CONTAINERS
-
+# Remove Containers
 A small tool wrote in Java. The main idea was to remove 'orphans' containers created by TestContainers library when you
 append  `.withReuse(true);`
 to the container instance.

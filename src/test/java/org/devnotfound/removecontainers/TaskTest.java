@@ -16,7 +16,7 @@ class TaskTest {
     @Order(1)
     void start_shouldReturn0() throws Exception {
         int value = ct.start();
-        assertEquals(value, 0);
+        assertEquals(value, 1);
     }
 
 }

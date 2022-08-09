@@ -20,15 +20,19 @@ public class CLI {
         pb.redirectErrorStream(true);
         Process p = pb.start();
 
-        String ids = new String(p.getInputStream().readAllBytes());
+        String message = new String(p.getInputStream().readAllBytes());
         p.waitFor();
 
-        if (ids.isEmpty()) {
-            throw new RuntimeException("Id array is empty : No container are currently executed by Docker");
-
+        if (Parser.isError(message)) {
+            logger.info(message);
+            throw new RuntimeException("An error occurred : bad request or docker not running");
         }
 
-        return List.of(ids.trim().split("\\n"));
+        if (message.isEmpty()) {
+            throw new RuntimeException("Id array is empty : No container are currently executed by Docker");
+        }
+
+        return List.of(message.trim().split("\\n"));
     }
 
     String inspect(String id) throws IOException, InterruptedException {
